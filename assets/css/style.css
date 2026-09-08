@@ -57,10 +57,12 @@
   --color-divider: #1e1652;
   --color-text: #edebf7;
   --color-text-muted: #a8a3c9;
-  --color-text-faint: #7b749f;
+  --color-text-faint: #8b84b0;
   --color-text-inverse: #0c0634;
   --color-primary: #e23a44;
   --color-primary-hover: #f0555e;
+  --color-btn: #cc2b35;
+  --color-btn-hover: #e23a44;
   --color-on-primary: #ffffff;
   --color-accent-text: #ff8f96;
   --color-focus: #ff8f96;
@@ -83,10 +85,12 @@
   --color-divider: #e4e1d8;
   --color-text: #0c0634;
   --color-text-muted: #524d78;
-  --color-text-faint: #7d789c;
+  --color-text-faint: #625d84;
   --color-text-inverse: #ffffff;
   --color-primary: #c62d38;
   --color-primary-hover: #a92028;
+  --color-btn: #b3232b;
+  --color-btn-hover: #97181f;
   --color-on-primary: #ffffff;
   --color-accent-text: #a92028;
   --color-focus: #c62d38;
@@ -100,6 +104,30 @@
 
 /* No prefers-color-scheme fallback by design: dark navy is the brand default
    for every visitor. Light applies only via an explicit toggle. */
+
+/* --------------------------------------------------------------------------
+   The navy chassis. These regions stay navy in light mode, so they re-declare
+   the token set locally. Without this, accent text and borders resolve against
+   the light page and vanish against the navy.
+   -------------------------------------------------------------------------- */
+.hero,
+.band,
+.pagehead,
+.specstrip,
+.footer {
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.74);
+  --color-text-faint: rgba(255, 255, 255, 0.54);
+  --color-accent-text: #ff8f96;
+  --color-focus: #ff8f96;
+  --color-surface: rgba(255, 255, 255, 0.045);
+  --color-surface-2: rgba(255, 255, 255, 0.07);
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-strong: rgba(255, 255, 255, 0.3);
+  --color-btn: #cc2b35;
+  --color-btn-hover: #e23a44;
+  --color-primary: #e23a44;
+}
 
 /* ==========================================================================
    Primitives
@@ -214,12 +242,31 @@ section { position: relative; }
               color var(--transition-interactive), transform var(--transition-interactive);
 }
 .btn:active { transform: translateY(1px); }
-.btn--primary { background: var(--color-primary); color: var(--color-on-primary); }
-.btn--primary:hover { background: var(--color-primary-hover); }
+.btn--primary { background: var(--color-btn); color: var(--color-on-primary); }
+.btn--primary:hover { background: var(--color-btn-hover); }
 .btn--ghost { border-color: rgba(255, 255, 255, 0.28); color: #fff; background: transparent; }
 .btn--ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.07); }
 [data-theme='light'] .btn--ghost { border-color: var(--color-border-strong); color: var(--color-text); }
 [data-theme='light'] .btn--ghost:hover { background: var(--color-surface-offset); border-color: var(--color-text); }
+/* The navy chassis stays navy in light mode, so ghost buttons on it must stay
+   white. Without this they render navy-on-navy and disappear. */
+[data-theme='light'] .hero .btn--ghost,
+[data-theme='light'] .band .btn--ghost,
+[data-theme='light'] .pagehead .btn--ghost,
+[data-theme='light'] .footer .btn--ghost,
+[data-theme='light'] .specstrip .btn--ghost {
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #fff;
+  background: transparent;
+}
+[data-theme='light'] .hero .btn--ghost:hover,
+[data-theme='light'] .band .btn--ghost:hover,
+[data-theme='light'] .pagehead .btn--ghost:hover,
+[data-theme='light'] .footer .btn--ghost:hover,
+[data-theme='light'] .specstrip .btn--ghost:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
 .btn--sm { padding: var(--space-3) var(--space-4); font-size: var(--text-xs); }
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--space-4); }
 
@@ -236,9 +283,9 @@ section { position: relative; }
 .chip--accent { border-color: rgba(226, 58, 68, 0.45); color: var(--color-accent-text); }
 
 .grid { display: grid; gap: var(--space-8); }
-.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-.grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 
 .card {
   padding: var(--space-8);
@@ -286,7 +333,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .logo { display: inline-flex; align-items: center; gap: var(--space-3); text-decoration: none; }
 .logo__mark { width: 34px; height: 34px; flex: none; color: var(--color-primary); }
-.logo__type { display: flex; flex-direction: column; line-height: 1.05; }
+.logo__type { display: flex; flex-direction: column; line-height: 1.12; }
 .logo__name {
   font-family: var(--font-display);
   font-size: 1.2rem;
@@ -299,7 +346,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.52);
+  margin-top: 2px;
 }
 
 .nav { display: flex; align-items: center; gap: var(--space-6); }
@@ -365,6 +413,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   .drawer .btn { margin-top: var(--space-6); width: 100%; }
+  /* The call to action lives in the drawer on small screens. */
+  .header__actions > .btn { display: none; }
+  .header__inner { gap: var(--space-4); }
 }
 
 /* ==========================================================================
@@ -403,7 +454,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .hero__inner {
   display: grid;
   gap: var(--space-8);
-  padding-block: clamp(var(--space-20), 12vw, var(--space-32));
+  padding-block: clamp(var(--space-16), 9vw, var(--space-24));
   max-width: 46rem;
 }
 .hero__title {
@@ -483,7 +534,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .pillar__list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
   gap: var(--space-3) var(--space-8);
   margin-top: var(--space-6);
   list-style: none;
@@ -597,11 +648,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .split {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: clamp(var(--space-8), 5vw, var(--space-20));
   align-items: center;
 }
 .split--top { align-items: start; }
+
+/* Asymmetric lead: give the serif heading column more room to breathe. */
+@media (min-width: 900px) {
+  .split--lead { grid-template-columns: 1.15fr 1fr; }
+}
+
+/* A row of statistics that stays a row on desktop. */
+.statrow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: var(--space-6);
+}
 .figframe {
   position: relative;
   border: 1px solid var(--color-border);
@@ -655,7 +718,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .band .stat__label { color: rgba(255, 255, 255, 0.7); }
 
 /* Module list inside the software band */
-.mods { display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: var(--space-5); }
+.mods { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 268px), 1fr)); gap: var(--space-5); }
 .mod {
   display: grid;
   gap: var(--space-2);
@@ -679,7 +742,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
    ========================================================================== */
 
 .form { display: grid; gap: var(--space-5); }
-.form__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-5); }
+.form__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--space-5); }
 .field { display: grid; gap: var(--space-2); }
 .field label { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); }
 .field input, .field textarea, .field select {
@@ -746,9 +809,17 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .footer__grid {
   display: grid;
-  grid-template-columns: minmax(240px, 1.4fr) repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: minmax(min(100%, 240px), 1.4fr) repeat(auto-fit, minmax(min(100%, 150px), 1fr));
   gap: var(--space-10);
   padding-block: var(--space-16) var(--space-10);
+}
+/* auto-fit still reserves tracks from its px minimum, so collapse explicitly. */
+@media (max-width: 900px) {
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+  .footer__grid > :first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 460px) {
+  .footer__grid { grid-template-columns: 1fr; }
 }
 .footer h4 {
   font-family: var(--font-mono);
@@ -756,7 +827,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.58);
   margin-bottom: var(--space-4);
 }
 .footer a { color: rgba(255, 255, 255, 0.72); text-decoration: none; font-size: var(--text-sm); }
@@ -778,7 +849,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   padding-block: var(--space-6);
   border-top: 1px solid rgba(255, 255, 255, 0.09);
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.58);
 }
 .footer .logo__name { font-size: 1.1rem; }
 
