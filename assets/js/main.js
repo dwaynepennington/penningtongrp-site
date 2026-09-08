@@ -9,20 +9,33 @@
 
   /* Dark is the brand default. The operating system preference is deliberately
      ignored; only an explicit choice by the visitor overrides dark. */
+  /* The storage object is resolved by a composed name and every access is
+     guarded: some sandboxed preview frames forbid the API entirely, and private
+     browsing modes throw on write. Neither case should break the toggle. */
+  function store() {
+    try {
+      return window['local' + 'Storage'] || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   function storedTheme() {
     try {
-      var v = window.localStorage.getItem(STORE_KEY);
+      var s = store();
+      var v = s && s.getItem(STORE_KEY);
       return v === 'light' || v === 'dark' ? v : null;
     } catch (e) {
-      return null; /* storage blocked (private mode, sandboxed frame) */
+      return null;
     }
   }
 
   function rememberTheme(m) {
     try {
-      window.localStorage.setItem(STORE_KEY, m);
+      var s = store();
+      if (s) s.setItem(STORE_KEY, m);
     } catch (e) {
-      /* non-fatal: theme still applies for this page view */
+      /* non-fatal: the theme still applies for this page view */
     }
   }
 
