@@ -67,8 +67,11 @@
 <section class="section">
   <div class="wrap wrap--default split split--top">
     <div class="stack-lg">
-      <form class="form reveal" data-contact-form data-to="info@penningtongrp.com" data-subject="Website enquiry"
-            data-endpoint="https://formsubmit.co/ajax/info@penningtongrp.com">
+      <form class="form reveal" data-contact-form method="POST" action="https://formsubmit.co/info@penningtongrp.com"
+            data-to="info@penningtongrp.com" data-subject="Website enquiry">
+        <input type="hidden" name="_next" value="https://penningtongrp.com/thanks.html">
+        <input type="hidden" name="_subject" value="Website enquiry">
+        <input type="hidden" name="_template" value="table">
         <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="form__row">
           <div class="field">
